@@ -1,0 +1,17 @@
+<h1>投稿一覧</h1>
+
+<% if flash[:notice] %>
+  <p class="notice"><%= flash[:notice] %></p>
+<% end %>
+
+<%= link_to "新規投稿", new_post_path, class: "btn btn-primary" %>
+
+投稿件数：<%= @posts.size %><br />
+<% if @posts.present? %> <!-- @posts が存在するか確認 -->
+  <% @posts.each do |post| %>
+      <%= post.title %><br />
+      <%= post.content %><br />
+  <% end %>
+<% else %>
+    <td colspan="2">投稿はありません。</td>
+<% end %>
