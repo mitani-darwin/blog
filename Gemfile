@@ -43,6 +43,12 @@ gem 'aws-sdk-s3', '~> 1.0'
 
 gem 'rails-i18n', '~> 8.0.1'
 
+# Devise本体
+gem 'devise'
+gem 'devise_invitable'
+
+gem 'dotenv-rails', groups: [:development, :test]
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
