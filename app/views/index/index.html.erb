@@ -4,6 +4,18 @@
   <p class="notice"><%= flash[:notice] %></p>
 <% end %>
 
+<% if user_signed_in? %>
+  <p>こんにちは、<%= current_user.email %>さん</p>
+<% else %>
+  <%= link_to "ログイン", new_user_session_path %>
+<% end %>
+
+<%= link_to "新規登録", new_user_registration_path unless user_signed_in? %>
+
+<% if flash[:notice] %>
+  <p class="notice"><%= flash[:notice] %></p>
+<% end %>
+
 <%= link_to "新規投稿", new_post_path, class: "btn btn-primary" %>
 
 投稿件数：<%= @posts.size %><br />
