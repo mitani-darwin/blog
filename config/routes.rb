@@ -1,17 +1,35 @@
 Rails.application.routes.draw do
-  devise_for :users
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  # Deviseのルートを定義。ただし`registrations#create` をスキップ
+  devise_for :users, controllers: {
+    sessions: "users/sessions",
+    registrations: "devise_invitable/registrations"
+  }, skip: [:registrations]
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
+  # 必要な `registrations` アクションのみを個別に復活
+  as :user do
+    get "users/sign_up", to: "devise_invitable/registrations#new", as: :new_user_registration
+    get "users/edit", to: "devise_invitable/registrations#edit", as: "edit_user_registration"
+    patch "users", to: "devise_invitable/registrations#update", as: "user_registration"
+    put "users", to: "devise_invitable/registrations#update"
+    delete "users", to: "devise_invitable/registrations#destroy"
+  end
+
+  # カスタムルートの追加
+  devise_scope :user do
+    # Magic Link のエントリーポイント
+    post "/users", to: "users/sessions#send_magic_link"
+    post "/magic_login", to: "users/sessions#send_magic_link", as: :send_magic_link
+    #    get "/magic_login/:token", to: "users/sessions#authenticate_magic_link", as: :magic_login
+  end
+  get "magic_link_login", to: "users/sessions#magic_link_login", as: :magic_login
+
+
+  # アプリケーションの正常性確認エンドポイント
   get "up" => "rails/health#show", as: :rails_health_check
 
-  # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
-  # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
-  # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
-
-  # Defines the root path route ("/")
-  # root "posts#index"
+  # ルートパスを定義
   root "index#index"
-  resources :posts
+
+  # posts用ルートの定義 (必要なアクションのみ)
+  resources :posts, only: [:new, :create]
 end
