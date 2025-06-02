@@ -40,6 +40,7 @@ class Users::SessionsController < ActionController::Base
     if user && user.magic_link_token_sent_at > 15.minutes.ago
       # トークンは有効、ログイン処理
       user.update!(magic_link_token: nil) # トークンを無効化
+      sign_in user
       flash[:notice] = "ログインしました！"
       redirect_to root_path
     else
