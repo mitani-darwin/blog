@@ -19,10 +19,8 @@ Rails.application.routes.draw do
     # Magic Link のエントリーポイント
     post "/users", to: "users/sessions#send_magic_link"
     post "/magic_login", to: "users/sessions#send_magic_link", as: :send_magic_link
-    #    get "/magic_login/:token", to: "users/sessions#authenticate_magic_link", as: :magic_login
+    get "/magic_login/:token", to: "users/sessions#magic_link_login", as: :magic_login
   end
-  get "magic_link_login", to: "users/sessions#magic_link_login", as: :magic_login
-
 
   # アプリケーションの正常性確認エンドポイント
   get "up" => "rails/health#show", as: :rails_health_check

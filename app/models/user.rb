@@ -1,10 +1,11 @@
 class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+         :recoverable, :rememberable, :validatable,
+         authentication_keys: [:email]
 
-
-  # Magic Linkフィールドを追加
-  #  attr_accessor :magic_link_token, :magic_link_token_sent_at
+  # Devise バリデーションを無効にする
+  validates :password, presence: false
+  validates :encrypted_password, presence: false
 
   # トークンが有効かチェック
   def magic_link_token_valid?

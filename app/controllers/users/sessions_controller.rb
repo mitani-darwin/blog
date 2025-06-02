@@ -1,5 +1,7 @@
 class Users::SessionsController < ActionController::Base
   def send_magic_link
+    email = params.dig(:user, :email)
+
     # メールアドレスを取得
     if email.blank?
       flash[:alert] = "メールアドレスを入力してください"
@@ -37,7 +39,6 @@ class Users::SessionsController < ActionController::Base
 
     if user && user.magic_link_token_sent_at > 15.minutes.ago
       # トークンは有効、ログイン処理
-      sign_in(user)
       user.update!(magic_link_token: nil) # トークンを無効化
       flash[:notice] = "ログインしました！"
       redirect_to root_path
