@@ -1,7 +1,6 @@
 class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable,
-         authentication_keys: [:email]
+         :recoverable, :rememberable, :validatable
 
   # Devise バリデーションを無効にする
   validates :password, presence: false
@@ -16,4 +15,10 @@ class User < ApplicationRecord
   def password_required?
     false
   end
+
+  # メールアドレスのバリデーションのみ維持
+  def email_required?
+    true
+  end
+
 end

@@ -1,4 +1,7 @@
 class Users::SessionsController < ActionController::Base
+  # 正しいDeviseのコールバックをスキップ
+  skip_before_action :verify_authenticity_token, only: [:magic_link_login]
+
   def send_magic_link
     email = params.dig(:user, :email)
 
@@ -26,7 +29,7 @@ class Users::SessionsController < ActionController::Base
       )
       user.save
       magic_link = Rails.application.routes.url_helpers.magic_login_url(token: token) # リンク生成
-      UserMailer.magic_link_email(user.email, magic_link).deliver_now
+      UserMailer.magic_link_email(user.email, magic_link).deliver_later
       flash[:alert] = "登録されていないメールアドレスでしたので、仮登録のご案内メールを送信しました。"
     end
 
