@@ -28,5 +28,8 @@ module Blog
 
     # ロケールファイルの読み込みパスを設定
     config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}').to_s]
+
+    # Propshaftを使用することを明示的に設定
+    config.assets.pipeline = :propshaft
   end
 end

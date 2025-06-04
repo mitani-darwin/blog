@@ -72,3 +72,6 @@ group :test do
 end
 
 gem 'mutex_m'
+# sassc-railsを削除して、dartsass-railsに変更
+gem "bootstrap", "~> 5.3"
+gem "dartsass-rails"  # sassc-railsの代わり
