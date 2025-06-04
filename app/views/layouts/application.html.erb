@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,27 +11,86 @@
 
   <%= yield :head %>
 
-  <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-  <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
   <link rel="icon" href="/icon.png" type="image/png">
   <link rel="icon" href="/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/icon.png">
 
-  <%# Includes all stylesheet files in app/assets/stylesheets %>
-  <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   <%= javascript_importmap_tags %>
 </head>
 
 <body>
+<!-- Bootstrapナビゲーションバー -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container">
-    <a class="navbar-brand" href="/">Blog</a>
+    <!-- ブランド/ロゴ -->
+    <%= link_to "BrightTalk", root_path, class: "navbar-brand" %>
+
+    <!-- ハンバーガーボタン（モバイル用） -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- ナビゲーションメニュー -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <%= link_to "ホーム", root_path, class: "nav-link #{'active' if current_page?(root_path)}" %>
+        </li>
+      </ul>
+
+      <!-- 右側のメニュー -->
+      <ul class="navbar-nav">
+        <% if user_signed_in? %>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <%= current_user.email %>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><%= link_to "プロフィール", edit_user_registration_path, class: "dropdown-item" %></li>
+              <li><%= link_to "設定", "#", class: "dropdown-item" %></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><%= button_to "ログアウト", destroy_user_session_path, method: :delete, class: "dropdown-item" %></li>
+            </ul>
+          </li>
+        <% else %>
+          <li class="nav-item">
+            <%= link_to "ログイン", new_user_session_path, class: "nav-link" %>
+          </li>
+          <li class="nav-item">
+            <%= link_to "会員登録", new_user_registration_path, class: "btn btn-outline-light ms-2" %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
   </div>
 </nav>
 
-<div class="container mt-4">
+<!-- フラッシュメッセージ -->
+<% if notice %>
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <%= notice %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+<% end %>
+
+<% if alert %>
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <%= alert %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+<% end %>
+
+<!-- メインコンテンツ -->
+<main class="container mt-4">
   <%= yield %>
-</div>
+</main>
+
+<!-- フッター -->
+<footer class="bg-dark text-light text-center py-3 mt-5">
+  <div class="container">
+    <p>&copy; 2025 Blog. All rights reserved.</p>
+  </div>
+</footer>
 </body>
 </html>
