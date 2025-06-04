@@ -86,9 +86,4 @@ Rails.application.configure do
   config.log_level = :debug
 
   Rails.application.routes.default_url_options[:host] = "localhost:3000"
-
-  config.active_job.queue_adapter = :solid_queue
-
-  config.solid_queue.concurrency = ENV.fetch("SOLID_QUEUE_CONCURRENCY", 5).to_i
-  config.solid_queue.polling_interval = ENV.fetch("SOLID_QUEUE_POLLING_INTERVAL", 1).to_i
 end

@@ -29,7 +29,7 @@ class Users::SessionsController < ActionController::Base
       )
       user.save
       magic_link = Rails.application.routes.url_helpers.magic_login_url(token: token) # リンク生成
-      UserMailer.magic_link_email(user.email, magic_link).deliver_later
+      UserMailer.magic_link_email(user.email, magic_link).now
       flash[:alert] = "登録されていないメールアドレスでしたので、仮登録のご案内メールを送信しました。"
     end
 
